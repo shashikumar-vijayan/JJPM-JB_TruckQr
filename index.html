@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Truck QR Generator</title>
+  <title>JJPM-JB Truck QR Generator</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     body {
@@ -17,21 +17,12 @@
     h1 {
       color: #333;
     }
-    input, label {
+    input, select {
       padding: 10px;
       width: 250px;
-      margin: 5px;
+      margin: 8px;
       border: 1px solid #ccc;
       border-radius: 6px;
-    }
-    .checkbox-group {
-      display: flex;
-      justify-content: center;
-      margin-top: 10px;
-    }
-    .checkbox-group label {
-      width: auto;
-      margin-right: 15px;
     }
     button {
       padding: 10px 20px;
@@ -40,13 +31,17 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      margin-top: 15px;
+      margin-top: 10px;
     }
     button:hover {
       background-color: #004999;
     }
     #qrcode {
       margin-top: 20px;
+    }
+    #saveBtn {
+      margin-top: 10px;
+      display: none;
     }
     .instructions {
       margin-top: 30px;
@@ -59,23 +54,25 @@
 </head>
 <body>
 
-  <h1>Truck QR Generator</h1>
+  <h1>JJPM-JB Truck QR Generator</h1>
 
   <input id="driver" placeholder="Driver Name" />
   <input id="truck" placeholder="Truck Number" />
   <input id="do" placeholder="DO Number" />
 
-  <div class="checkbox-group">
-    <label><input type="radio" name="purpose" value="Loading" checked> Loading</label>
-    <label><input type="radio" name="purpose" value="Unloading"> Unloading</label>
-  </div>
+  <select id="purpose">
+    <option value="">Select Purpose</option>
+    <option value="Loading">Loading</option>
+    <option value="Unloading">Unloading</option>
+  </select>
 
   <button onclick="generateQR()">Generate QR</button>
 
   <div id="qrcode"></div>
+  <button id="saveBtn" onclick="saveQR()">Save QR to Phone</button>
 
   <div class="instructions">
-    After generating, long-press the QR on your phone to save or screenshot it.<br>
+    After generating, you can save or screenshot the QR.<br>
     Show it at the gate for scanning.
   </div>
 
@@ -84,24 +81,40 @@
       const driver = document.getElementById("driver").value.trim();
       const truck = document.getElementById("truck").value.trim();
       const doNo = document.getElementById("do").value.trim();
-      const purpose = document.querySelector('input[name="purpose"]:checked').value;
+      const purpose = document.getElementById("purpose").value;
 
-      if (!driver || !truck || !doNo) {
-        alert("Please fill in all fields.");
+      if (!driver || !truck || !doNo || !purpose) {
+        alert("Please fill in all fields and select a purpose.");
         return;
       }
 
       const qrData = `Driver: ${driver}\nTruck No: ${truck}\nDO No: ${doNo}\nPurpose: ${purpose}`;
-
       document.getElementById("qrcode").innerHTML = "";
+      document.getElementById("saveBtn").style.display = "none";
 
-      new QRCode(document.getElementById("qrcode"), {
+      const qr = new QRCode(document.getElementById("qrcode"), {
         text: qrData,
         width: 256,
         height: 256,
-        colorDark: "#000000",
-        colorLight: "#ffffff"
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
       });
+
+      // Small delay to show QR then enable save button
+      setTimeout(() => {
+        document.getElementById("saveBtn").style.display = "inline-block";
+      }, 300);
+    }
+
+    function saveQR() {
+      const qrCanvas = document.querySelector('#qrcode canvas');
+      if (!qrCanvas) return;
+
+      const link = document.createElement("a");
+      link.download = "TruckQR.png";
+      link.href = qrCanvas.toDataURL("image/png");
+      link.click();
     }
   </script>
 
