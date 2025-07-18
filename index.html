@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Truck QR Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    h1 {
+      color: #333;
+    }
+    input {
+      padding: 10px;
+      width: 250px;
+      margin: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #004999;
+    }
+    #qrcode {
+      margin-top: 20px;
+    }
+    .instructions {
+      margin-top: 30px;
+      font-size: 0.9em;
+      color: #666;
+      max-width: 300px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>JJPM-JB Truck QR Generator</h1>
+
+  <input id="driver" placeholder="Driver Name" />
+  <input id="truck" placeholder="Truck Number" />
+  <input id="do" placeholder="DO Number" />
+  <button onclick="generateQR()">Generate QR</button>
+
+  <div id="qrcode"></div>
+
+  <div class="instructions">
+    After generating, long-press the QR on your phone to save or screenshot it.<br>
+<br>
+    Selepas menjana, tekan lama pada QR di telefon anda untuk menyimpan atau tangkap skrin.<br>
+     </div>
+
+  <script>
+    function generateQR() {
+      const driver = document.getElementById("driver").value.trim();
+      const truck = document.getElementById("truck").value.trim();
+      const doNo = document.getElementById("do").value.trim();
+
+      if (!driver || !truck || !doNo) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      const qrData = `Driver: ${driver}\nTruck No: ${truck}\nDO No: ${doNo}`;
+
+      // Clear previous QR
+      document.getElementById("qrcode").innerHTML = "";
+
+      new QRCode(document.getElementById("qrcode"), {
+        text: qrData,
+        width: 256,
+        height: 256,
+        colorDark : "#000000",
+        colorLight : "#ffffff"
+      });
+    }
+  </script>
+
+</body>
+</html>
