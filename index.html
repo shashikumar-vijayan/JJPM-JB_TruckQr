@@ -17,12 +17,21 @@
     h1 {
       color: #333;
     }
-    input {
+    input, label {
       padding: 10px;
       width: 250px;
-      margin: 10px;
+      margin: 5px;
       border: 1px solid #ccc;
       border-radius: 6px;
+    }
+    .checkbox-group {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .checkbox-group label {
+      width: auto;
+      margin-right: 15px;
     }
     button {
       padding: 10px 20px;
@@ -31,7 +40,7 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 15px;
     }
     button:hover {
       background-color: #004999;
@@ -50,43 +59,48 @@
 </head>
 <body>
 
-  <h1>JJPM-JB Truck QR Generator</h1>
+  <h1>Truck QR Generator</h1>
 
   <input id="driver" placeholder="Driver Name" />
   <input id="truck" placeholder="Truck Number" />
   <input id="do" placeholder="DO Number" />
+
+  <div class="checkbox-group">
+    <label><input type="radio" name="purpose" value="Loading" checked> Loading</label>
+    <label><input type="radio" name="purpose" value="Unloading"> Unloading</label>
+  </div>
+
   <button onclick="generateQR()">Generate QR</button>
 
   <div id="qrcode"></div>
 
   <div class="instructions">
     After generating, long-press the QR on your phone to save or screenshot it.<br>
-<br>
-    Selepas menjana, tekan lama pada QR di telefon anda untuk menyimpan atau tangkap skrin.<br>
-     </div>
+    Show it at the gate for scanning.
+  </div>
 
   <script>
     function generateQR() {
       const driver = document.getElementById("driver").value.trim();
       const truck = document.getElementById("truck").value.trim();
       const doNo = document.getElementById("do").value.trim();
+      const purpose = document.querySelector('input[name="purpose"]:checked').value;
 
       if (!driver || !truck || !doNo) {
         alert("Please fill in all fields.");
         return;
       }
 
-      const qrData = `Driver: ${driver}\nTruck No: ${truck}\nDO No: ${doNo}`;
+      const qrData = `Driver: ${driver}\nTruck No: ${truck}\nDO No: ${doNo}\nPurpose: ${purpose}`;
 
-      // Clear previous QR
       document.getElementById("qrcode").innerHTML = "";
 
       new QRCode(document.getElementById("qrcode"), {
         text: qrData,
         width: 256,
         height: 256,
-        colorDark : "#000000",
-        colorLight : "#ffffff"
+        colorDark: "#000000",
+        colorLight: "#ffffff"
       });
     }
   </script>
