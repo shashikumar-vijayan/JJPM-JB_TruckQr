@@ -59,7 +59,8 @@
   <input id="driver" placeholder="Driver Name" />
   <input id="truck" placeholder="Truck Number" />
   <input id="do" placeholder="DO Number" />
-
+  <input id="contact" placeholder="Contact Number" />
+  
   <select id="purpose">
     <option value="">Select Purpose</option>
     <option value="Loading">Loading</option>
@@ -72,11 +73,8 @@
   <button id="saveBtn" onclick="saveQR()">Save QR to Phone</button>
 
   <div class="instructions">
-    After generating, please click save to save it to your phone. Then, please scan it at JJPM-JB Guard House.<br>
-<br>
-<br>
-
-    Selepas menjana, sila klik simpan untuk menyimpannya ke dalam telefon anda. Kemudian, sila imbas di Pondok Pengawal JJPM-JB.<br>
+    After generating, please click save to save it to your phone. Then, please scan it at JJPM-JB Guard House.<br><br>
+    Selepas menjana, sila klik simpan untuk menyimpannya ke dalam telefon anda. Kemudian, sila imbas di Pondok Pengawal JJPM-JB.
   </div>
 
   <script>
@@ -84,14 +82,15 @@
       const driver = document.getElementById("driver").value.trim();
       const truck = document.getElementById("truck").value.trim();
       const doNo = document.getElementById("do").value.trim();
+      const contact = document.getElementById("contact").value.trim();
       const purpose = document.getElementById("purpose").value;
 
-      if (!driver || !truck || !doNo || !purpose) {
-        alert("Please fill in all fields and select a purpose.");
+      if (!driver || !truck || !doNo || !purpose || !contact) {
+        alert("Please fill in all fields including Contact Number.");
         return;
       }
 
-      const qrData = `Driver: ${driver}\nTruck No: ${truck}\nDO No: ${doNo}\nPurpose: ${purpose}`;
+      const qrData = `Driver: ${driver}\nTruck No: ${truck}\nDO No: ${doNo}\nPurpose: ${purpose}\nContact: ${contact}`;
       document.getElementById("qrcode").innerHTML = "";
       document.getElementById("saveBtn").style.display = "none";
 
@@ -104,7 +103,6 @@
         correctLevel : QRCode.CorrectLevel.H
       });
 
-      // Small delay to show QR then enable save button
       setTimeout(() => {
         document.getElementById("saveBtn").style.display = "inline-block";
       }, 300);
